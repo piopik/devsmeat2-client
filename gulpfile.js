@@ -1,5 +1,5 @@
 var src = {
-    js: ['src/js/main.js'],
+    js: 'src/js/**/*',
     lessImporter: 'src/less/main.less',
     less: 'src/less/**/*.less',
     scssImporter: 'src/scss/main.scss',
@@ -24,94 +24,74 @@ var dest = {
 var argv = require('yargs').argv;
 
 var gulp            = require('gulp'),
-    babel           = require('gulp-babel'),
-    minifyJS        = require('gulp-uglify'),
     sourcemaps      = require('gulp-sourcemaps'),
+
     less            = require('gulp-less'),
     sass            = require('gulp-sass');
-    iconfont        = require('gulp-iconfont'),
-    iconfontCss     = require('gulp-iconfont-css'),
-    concat          = require('gulp-concat'),
-    imageMin        = require('gulp-imagemin'),
-    browserSync     = require('browser-sync').create(),
-    reload          = browserSync.reload,
     postcss         = require('gulp-postcss'),
     autoprefixer    = require('autoprefixer'),
-    cssnano         = require('cssnano'),
-    postcssFontMagician = require('postcss-font-magician')({}),
-    git             = require('gulp-git'),
-    del             = require('del');
+
+    iconfont        = require('gulp-iconfont'),
+    iconfontCss     = require('gulp-iconfont-css'),
+
+    imageMin        = require('gulp-imagemin'),
+
+    browserSync     = require('browser-sync').create(),
+    reload          = browserSync.reload,
+
+    concat          = require('gulp-concat'),
+    del             = require('del'),
+    fs              = require('fs'),
+
+    babelify        = require('babelify'),
+    vueify          = require('vueify'),
+    browserify      = require('browserify');
 
 var runTimestamp = Math.round(Date.now()/1000);
 
 gulp.task('js', function () {
 
-    if(argv.p){
-        return gulp.src(src.js)
-            .pipe(babel({
-                presets: ['es2015']
-            }))
-            .pipe(gulp.dest(dest.js))
-    } else {
-        return gulp.src(src.js)
-            .pipe(babel({
-                presets: ['es2015']
-            }))
-            .pipe(minifyJS().on('error', function(error){
-                console.log(error.toString());
-                this.emit('end')
-            }))
-            .pipe(gulp.dest(dest.js))
-    }
+    return browserify('./src/js/index.js')
+        .transform(babelify, { presets: ['es2015'], plugins: ["transform-runtime"] })
+        .transform(vueify)
+        .bundle().on('error', function(error){
+            console.log(error.toString());
+            this.emit('end')
+        })
+        .pipe(fs.createWriteStream("./dist/js/app.js"));
 });
 
 gulp.task('css', function () {
+
     var processors = [
-        autoprefixer,
-        // postcssFontMagician
+        autoprefixer
     ];
 
-    if(!argv.p){
-        processors.push(cssnano)
+    if(argv.s){
+        return gulp.src(src.scssImporter)
+            .pipe(sourcemaps.init())
+            .pipe(sass()).on('error', function(error){
+                console.log(error.toString());
+                this.emit('end')
+            })
+            .pipe(concat('main.css'))
+            .pipe(postcss(processors))
+            .pipe(sourcemaps.write('/'))
+            .pipe(gulp.dest(dest.css))
+            .pipe(browserSync.stream());
+    } else {
+        return gulp.src(src.lessImporter)
+            .pipe(sourcemaps.init())
+            .pipe(less()).on('error', function(error){
+                console.log(error.toString());
+                this.emit('end')
+            })
+            .pipe(concat('main.css'))
+            .pipe(postcss(processors))
+            .pipe(sourcemaps.write('/'))
+            .pipe(gulp.dest(dest.css))
+            .pipe(browserSync.stream());
     }
-
-    var fs = require('fs');
-    fs.stat('./src/less/pack.less', function(err, stat) {
-        if(err == null) {
-            src.lessImporter = ['src/less/pack.less', src.lessImporter ]
-        }
-
-        if(argv.s){
-            return gulp.src(src.scssImporter)
-                .pipe(sourcemaps.init())
-                .pipe(sass()).on('error', function(error){
-                    console.log(error.toString());
-                    this.emit('end')
-                })
-                .pipe(concat('main.css'))
-                .pipe(postcss(processors))
-                .pipe(sourcemaps.write('/'))
-                .pipe(gulp.dest(dest.css))
-                .pipe(browserSync.stream());
-        } else {
-            return gulp.src(src.lessImporter)
-                .pipe(sourcemaps.init())
-                .pipe(less()).on('error', function(error){
-                    console.log(error.toString());
-                    this.emit('end')
-                })
-                .pipe(concat('main.css'))
-                .pipe(postcss(processors))
-                .pipe(sourcemaps.write('/'))
-                .pipe(gulp.dest(dest.css))
-                .pipe(browserSync.stream());
-        }
-
-
-
-    });
-
-
 });
 
 gulp.task('html', function () {
@@ -190,74 +170,6 @@ gulp.task('server', function () {
             baseDir: "./dist/"
         }
     });
-});
-
-
-gulp.task('pack', function () {
-
-    if(argv.s){
-
-        git.clone('http://gitlab.sosoftware.pl/front/sointeractive-common-styles.git', {args: './pack'}, function(err) {
-
-            return Promise.all([
-                new Promise(function(resolve, reject) {
-                    gulp.src('./pack/dist/pack.css')
-                        .pipe(gulp.dest('./dist/css'))
-                        .on('error', reject)
-                        .on('end', resolve)
-                }),
-                new Promise(function(resolve, reject) {
-                    gulp.src('./pack/dist/pack.css.map')
-                        .pipe(gulp.dest('./dist/css'))
-                        .on('error', reject)
-                        .on('end', resolve)
-                }),
-                new Promise(function(resolve, reject) {
-                    gulp.src('./pack/dist/pack.js')
-                        .pipe(gulp.dest('./dist/js/'))
-                        .on('error', reject)
-                        .on('end', resolve)
-                }),
-                new Promise(function(resolve, reject) {
-                    gulp.src('./pack/dist/img/*')
-                        .pipe(gulp.dest('./dist/img'))
-                        .on('error', reject)
-                        .on('end', resolve)
-                }),
-                new Promise(function(resolve, reject) {
-                    gulp.src('./pack/dist/fonts/*')
-                        .pipe(gulp.dest('./dist/fonts'))
-                        .on('error', reject)
-                        .on('end', resolve)
-                }),
-                new Promise(function(resolve, reject) {
-                    gulp.src('./pack/dist/utils/*')
-                        .pipe(gulp.dest('./dist/utils'))
-                        .on('error', reject)
-                        .on('end', resolve)
-                }),
-                new Promise(function(resolve, reject) {
-                    gulp.src('./pack/dist/pack.less')
-                        .pipe(gulp.dest('./src/less'))
-                        .on('error', reject)
-                        .on('end', resolve)
-                })
-            ]).then(function () {
-                console.log('Pack installed');
-                gulp.src('./pack', {read: false});
-                del([
-                    './pack/**/*'
-                ]);
-            });
-
-        });
-
-    } else if(argv.c){
-        console.log('Comarch pack not defined yet');
-    } else {
-        console.log('Usage: gulp pack -(soi|ca)');
-    }
-
 });
 
 gulp.task('build', ['js', 'css', 'html', 'icons', 'fonts', 'img']);
