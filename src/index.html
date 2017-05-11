@@ -34,8 +34,8 @@
 
         <div v-if="toaster.data.length" class="toaster" >
             <div class="toast" v-for="toast in toaster.data">
-                <img class="icon" v-bind:src=" '/img/' + toast.icon + '.svg' ">
                 <div class="text" v-bind:style="{ background : toast.color }">{{ toast.text }}</div>
+                <img class="icon" v-bind:src=" '/img/' + toast.icon + '.svg' ">
             </div>
         </div>
 
