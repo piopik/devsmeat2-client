@@ -3,58 +3,165 @@
  */
 
 import io from 'socket.io-client';
-
-let socket = io.connect("http://localhost:3000/");
-
-let printer = (data) => {
-    let p = document.createElement("p");
-    p.innerText=JSON.stringify(data);
-    document.body.appendChild(p);
-};
+import config from './config';
+import Vue from "vue/dist/vue.js";
 
 window.onload = () => {
-
+    document.querySelector('#app').classList.remove('loading');
 };
 
-socket.on("joined",function(data) {
-    printer(data);
-});
+let socket = io.connect(config.engine);
 
-socket.on("question",function(data) {
-    printer(data);
+let app = new Vue({
+    data : {
+        socket : socket,
+        user : {},
+        timer : {
+            value : 0,
+            max : 0
+        },
+        toaster : {
+            state : {},
+            data : []
+        },
+        question : {
+            state : {
+                left : false,
+                right : true,
+            },
+            data : {}
+        },
+        leaderboard : {
+            state : {
+                left : false,
+                right : true
+            },
+            data : {}
+        },
+        result : {
+            state : {
+                active : false,
+                correct : false,
+                points : 0
+            }
+        }
+    },
+    methods : {
+        sendAnswer : function(id){
+            this.socket.emit('answer', {
+                'answer' : [id]
+            });
+        },
+        shuffle : function(array){
+            for (let i = array.length; i; i--) {
+                let j = Math.floor(Math.random() * i);
+                [array[i - 1], array[j]] = [array[j], array[i - 1]];
+            }
+        }
+    },
+    filters : {
+        position : function (value) {
+            if (!value) {
+                return '-';
+            } else if (value === 1) {
+                return value + 'st';
+            } else if (value % 10 === 2 || value % 10 === 3) {
+                return value + 'nd';
+            } else {
+                return value + 'th';
+            }
+        }
+    },
+    created : function(){
 
-    setTimeout(()=>{
-        printer('answer');
-        socket.emit('answer', {
-            'answer' : [2]
+        this.socket.on("joined",function(res) {
+            app.user = res;
+            app.user.position = false;
+            app.user.points = 0;
         });
-    },500);
+
+        this.socket.on("question",function(res) {
+
+            app.question.data = res;
+            app.shuffle(app.question.data.answers);
+
+            app.timer.value=config.questionTime/1000;
+            app.timer.max=config.questionTime/1000;
+
+            app.toaster.data.length=0;
+
+            app.question.state.right = false;
+        });
+
+        this.socket.on("questionResult",function(res) {
+            app.result.state.active = true;
+            app.result.state.correct = res.correct;
+            app.result.state.points = res.points;
+
+            app.question.state.left = true;
+
+            app.user.points += res.points;
+        });
+
+        this.socket.on("questionFinish",function(res) {
+            app.question.state.left = true;
+
+            app.result.state.active = false;
+
+            setTimeout(() => {
+                app.question.state.left = false;
+                app.question.state.right = true;
+                app.question.state.result = false;
+            },1000);
+        });
+
+        this.socket.on("leaderboard",function(res) {
+            app.result.state.active = false;
+
+            app.leaderboard.state.right = false;
+
+            app.leaderboard.data = res;
+
+            for(let i =0; i < app.leaderboard.data.leaderboard.length; i++){
+                if(app.leaderboard.data.leaderboard[i].id === app.user.id){
+                    app.user.position = app.leaderboard.data.leaderboard[i].position
+                }
+            }
+
+            app.timer.value=config.leaderboardTime/1000;
+            app.timer.max=config.leaderboardTime/1000;
+        });
+
+        this.socket.on("leaderboardFinish",function(res) {
+
+            app.leaderboard.state.left = true;
+
+            setTimeout(() => {
+                app.leaderboard.state.left = false;
+                app.leaderboard.state.right = true;
+            },1000);
+
+            clearInterval();
+        });
+
+        this.socket.on("gameFinish",function(res) {
+
+        });
+
+        this.socket.on("message",function(res) {
+
+            app.toaster.data.push(res);
+
+        });
+
+    },
+    mounted : function() {
+        this.timer.interval = setInterval(() => {
+            if (app.timer.value>0){
+                app.timer.value--;
+            }
+        },1000);
+    },
 });
 
-socket.on("questionResult",function(data) {
-    printer(data);
-});
-
-socket.on("questionFinish",function(data) {
-    printer(data);
-});
-
-socket.on("leaderboard",function(data) {
-    printer(data);
-});
-
-socket.on("leaderboardFinish",function(data) {
-    printer(data);
-});
-
-socket.on("gameFinish",function(data) {
-    printer(data);
-});
-
-socket.on("message",function(data) {
-    printer(data);
-});
-
-
-
-
+app.$mount('#app');

@@ -41,8 +41,8 @@
     "postcss-font-magician": "^1.4.0",
     "socket.io": "^1.7.2",
     "socket.io-client": "^2.0.1",
+    "vue": "^2.3.3",
     "vueify": "^9.4.1",
-    "vueify-insert-css": "^1.0.0",
     "yargs": "^6.2.0"
   }
 }

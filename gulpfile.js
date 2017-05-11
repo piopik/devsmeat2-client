@@ -6,8 +6,6 @@ var src = {
     scss: 'src/scss/**/*.scss',
     html: 'src/**/*.html',
     utils: 'src/utils/**/*',
-    icons: 'src/icons/*.svg',
-    fonts: 'src/fonts/*',
     img: 'src/img/**/*'
 };
 
@@ -16,8 +14,6 @@ var dest = {
     css: 'dist/css/',
     html: 'dist/',
     utils: 'dist/utils/',
-    icons: 'dist/fonts/',
-    fonts: 'dist/fonts/',
     img: 'dist/img/'
 };
 
@@ -30,9 +26,6 @@ var gulp            = require('gulp'),
     sass            = require('gulp-sass');
     postcss         = require('gulp-postcss'),
     autoprefixer    = require('autoprefixer'),
-
-    iconfont        = require('gulp-iconfont'),
-    iconfontCss     = require('gulp-iconfont-css'),
 
     imageMin        = require('gulp-imagemin'),
 
@@ -104,32 +97,6 @@ gulp.task('utils', function () {
         .pipe(gulp.dest(dest.utils))
 });
 
-gulp.task('fonts', function () {
-    return gulp.src(src.fonts)
-        .pipe(gulp.dest(dest.fonts))
-});
-
-gulp.task('icons', function () {
-    del([
-        dest.fonts+'**/*'
-    ]);
-    return gulp.src(src.icons)
-        .pipe(iconfontCss({
-            fontName: 'icon-font',
-            path: 'src/icons/_template.css',
-            targetPath: 'icon-font.css'
-        }))
-        .pipe(iconfont({
-            fontName: 'icon-font',
-            prependUnicode: true,
-            formats: ['ttf', 'eot', 'woff', 'woff2', 'svg'],
-            fontHeight: 512,
-            descent: 70,
-            timestamp: runTimestamp
-        }))
-        .pipe(gulp.dest(dest.fonts))
-});
-
 gulp.task('img', function () {
     if(argv.i){
         del([
@@ -146,7 +113,7 @@ gulp.task('img', function () {
 
 gulp.task('watch', function () {
 
-    gulp.watch(src.js, ['js']).on("change", reload);
+    gulp.watch(src.js, ['js']);
 
     if(argv.s){
         gulp.watch(src.scss, ['css']);
@@ -154,9 +121,7 @@ gulp.task('watch', function () {
         gulp.watch(src.less, ['css']);
     }
 
-    gulp.watch(src.html, ['html']).on("change", reload);
-    gulp.watch(src.icons, ['icons']).on("change", reload);
-    gulp.watch(src.fonts, ['fonts']).on("change", reload);
+    gulp.watch(src.html, ['html']);
 
     if(argv.i){
         gulp.watch(src.img, ['img']);
@@ -172,6 +137,6 @@ gulp.task('server', function () {
     });
 });
 
-gulp.task('build', ['js', 'css', 'html', 'icons', 'fonts', 'img']);
+gulp.task('build', ['js', 'css', 'html', 'img']);
 gulp.task('start', ['build', 'watch', 'server']);
 gulp.task('default', ['build']);
