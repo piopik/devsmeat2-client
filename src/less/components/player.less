@@ -16,16 +16,18 @@
   }
 
   .wrapper{
-    height: 50px;
-    min-width: 320px;
-    text-align: center;
-    padding: 15px;
-    box-sizing: border-box;
-    border-radius: @border-radius @border-radius 0 0;
-
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    height: 50px;
+    min-width: @wrapper-width;
+    padding: 15px;
+
+    box-sizing: border-box;
+    border-radius: @border-radius @border-radius 0 0;
+
+    text-align: center;
 
     .position{
       font-size:.9em;

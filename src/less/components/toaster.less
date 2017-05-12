@@ -2,24 +2,27 @@
   position: fixed;
   top: 25px;
   right: 20px;
-  width : 160px;
 
   .toast{
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
 
+    height : 30px;
     margin-bottom: 10px;
 
     .icon{
-      margin-left : 5px;
       width : 30px;
       height : 30px;
+
+      margin-left : 5px;
     }
 
     .text{
       padding: 5px 10px;
+
       text-transform: capitalize;
+      border-radius: @border-radius;
     }
   }
 }

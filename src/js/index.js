@@ -63,10 +63,12 @@ let app = new Vue({
         position : function (value) {
             if (!value) {
                 return '-';
-            } else if (value === 1) {
+            } else if (value % 10 === 1 && value !== 11 ) {
                 return value + 'st';
-            } else if (value % 10 === 2 || value % 10 === 3) {
+            } else if (value % 10 === 2 ) {
                 return value + 'nd';
+            } else if ( value % 10 === 3) {
+                return value + 'rd';
             } else {
                 return value + 'th';
             }
@@ -91,6 +93,7 @@ let app = new Vue({
             app.toaster.data.length=0;
 
             app.question.state.right = false;
+            app.result.state.active = false;
         });
 
         this.socket.on("questionResult",function(res) {
@@ -103,7 +106,7 @@ let app = new Vue({
             app.user.points += res.points;
         });
 
-        this.socket.on("questionFinish",function(res) {
+        this.socket.on("questionFinish",function() {
             app.question.state.left = true;
 
             app.result.state.active = false;
@@ -132,7 +135,7 @@ let app = new Vue({
             app.timer.max=config.leaderboardTime/1000;
         });
 
-        this.socket.on("leaderboardFinish",function(res) {
+        this.socket.on("leaderboardFinish",function() {
 
             app.leaderboard.state.left = true;
 
