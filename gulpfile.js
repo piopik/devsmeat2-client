@@ -42,6 +42,10 @@ postcss = require('gulp-postcss'),
 
 gulp.task('js', function () {
 
+    if (!fs.existsSync("./dist/js/")){
+        fs.mkdirSync("./dist/js/");
+    }
+
     return browserify('./src/js/index.js')
         .transform(babelify, {presets: ['es2015'], plugins: ["transform-runtime"]})
         .transform(vueify)
