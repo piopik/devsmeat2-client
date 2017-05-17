@@ -1,7 +1,7 @@
 {
   "name": "devsmeat2-client",
   "version": "1.0.0",
-  "description": "Devsmeat #2 - engine",
+  "description": "Devsmeat #2 - client",
   "main": "dist",
   "scripts": {
     "dev": "gulp start",
