@@ -1,74 +1,68 @@
 .result{
 
-  &.inactive{
-    pointer-events:none;
+  color: @white;
+  text-align:center;
+  opacity:0;
+  transition: opacity .2s @transition-ease;
+
+  h2{
+    font-size: 3em;
+    margin:0;
+    font-weight:700;
   }
 
-  .wrapper{
-    color: @white;
-    text-align:center;
-    opacity:0;
-    transition: opacity .2s @transition-ease;
+  h3{
+    margin:0;
+    font-weight:300;
+  }
 
-    h2{
-      font-size: 3em;
-      margin:0;
-      font-weight:700;
-    }
+  .bold{
+    font-weight:700;
+  }
 
-    h3{
-      margin:0;
-      font-weight:300;
-    }
+  &:after{
+    width:400px;
+    height:400px;
+    border-radius: 50%;
+    background: @purple;
+    position: absolute;
+    content: '';
+    top:50%;
+    left:50%;
+    margin-top:-200px;
+    margin-left:-200px;
+    transform: scale(0);
+    opacity:1;
+    transition: all 1s @transition-ease;
+  }
 
-    .bold{
-      font-weight:700;
-    }
+  &:before{
+    width:300px;
+    height:300px;
+    border-radius: 50%;
+    background: @rose;
+    position: absolute;
+    content: '';
+    top:50%;
+    left:50%;
+    margin-top:-150px;
+    margin-left:-150px;
+    transform: scale(0);
+    opacity:1;
+    transition: all .5s @transition-ease;
+  }
 
+  &.active{
     &:after{
-      width:400px;
-      height:400px;
-      border-radius: 50%;
-      background: @purple;
-      position: absolute;
-      content: '';
-      top:50%;
-      left:50%;
-      margin-top:-200px;
-      margin-left:-200px;
-      transform: scale(0);
-      opacity:1;
-      transition: all 1s @transition-ease;
+      transform: scale(1);
+      opacity:0;
     }
 
     &:before{
-      width:300px;
-      height:300px;
-      border-radius: 50%;
-      background: @rose;
-      position: absolute;
-      content: '';
-      top:50%;
-      left:50%;
-      margin-top:-150px;
-      margin-left:-150px;
-      transform: scale(0);
-      opacity:1;
-      transition: all .5s @transition-ease;
+      transform: scale(1);
+      opacity:0;
     }
 
-    &.active{
-      &:after{
-        transform: scale(1);
-        opacity:0;
-      }
-
-      &:before{
-        transform: scale(1);
-        opacity:0;
-      }
-
-      opacity:1;
-    }
+    opacity:1;
   }
 }

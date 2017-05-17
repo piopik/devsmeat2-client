@@ -19,35 +19,33 @@ var dest = {
 
 var argv = require('yargs').argv;
 
-var gulp            = require('gulp'),
-    sourcemaps      = require('gulp-sourcemaps'),
+var gulp = require('gulp'),
+    sourcemaps = require('gulp-sourcemaps'),
 
-    less            = require('gulp-less'),
-    sass            = require('gulp-sass');
-    postcss         = require('gulp-postcss'),
-    autoprefixer    = require('autoprefixer'),
+    less = require('gulp-less'),
+    sass = require('gulp-sass');
+postcss = require('gulp-postcss'),
+    autoprefixer = require('autoprefixer'),
 
-    imageMin        = require('gulp-imagemin'),
+    imageMin = require('gulp-imagemin'),
 
-    browserSync     = require('browser-sync').create(),
-    reload          = browserSync.reload,
+    browserSync = require('browser-sync').create(),
+    reload = browserSync.reload,
 
-    concat          = require('gulp-concat'),
-    del             = require('del'),
-    fs              = require('fs'),
+    babelify = require('babelify'),
+    vueify = require('vueify'),
+    browserify = require('browserify'),
 
-    babelify        = require('babelify'),
-    vueify          = require('vueify'),
-    browserify      = require('browserify');
-
-var runTimestamp = Math.round(Date.now()/1000);
+    concat = require('gulp-concat'),
+    del = require('del'),
+    fs = require('fs');
 
 gulp.task('js', function () {
 
     return browserify('./src/js/index.js')
-        .transform(babelify, { presets: ['es2015'], plugins: ["transform-runtime"] })
+        .transform(babelify, {presets: ['es2015'], plugins: ["transform-runtime"]})
         .transform(vueify)
-        .bundle().on('error', function(error){
+        .bundle().on('error', function (error) {
             console.log(error.toString());
             this.emit('end')
         })
@@ -60,10 +58,10 @@ gulp.task('css', function () {
         autoprefixer
     ];
 
-    if(argv.s){
+    if (argv.s) {
         return gulp.src(src.scssImporter)
             .pipe(sourcemaps.init())
-            .pipe(sass()).on('error', function(error){
+            .pipe(sass()).on('error', function (error) {
                 console.log(error.toString());
                 this.emit('end')
             })
@@ -75,7 +73,7 @@ gulp.task('css', function () {
     } else {
         return gulp.src(src.lessImporter)
             .pipe(sourcemaps.init())
-            .pipe(less()).on('error', function(error){
+            .pipe(less()).on('error', function (error) {
                 console.log(error.toString());
                 this.emit('end')
             })
@@ -90,6 +88,7 @@ gulp.task('css', function () {
 gulp.task('html', function () {
     return gulp.src(src.html)
         .pipe(gulp.dest(dest.html))
+        .pipe(browserSync.stream());
 });
 
 gulp.task('utils', function () {
@@ -98,9 +97,9 @@ gulp.task('utils', function () {
 });
 
 gulp.task('img', function () {
-    if(argv.i){
+    if (argv.i) {
         del([
-            dest.img+'**/*'
+            dest.img + '**/*'
         ]);
         return gulp.src(src.img)
             .pipe(imageMin())
@@ -115,7 +114,7 @@ gulp.task('watch', function () {
 
     gulp.watch(src.js, ['js']);
 
-    if(argv.s){
+    if (argv.s) {
         gulp.watch(src.scss, ['css']);
     } else {
         gulp.watch(src.less, ['css']);
@@ -123,7 +122,7 @@ gulp.task('watch', function () {
 
     gulp.watch(src.html, ['html']);
 
-    if(argv.i){
+    if (argv.i) {
         gulp.watch(src.img, ['img']);
     }
 
@@ -137,6 +136,6 @@ gulp.task('server', function () {
     });
 });
 
-gulp.task('build', ['js', 'css', 'html', 'img']);
+gulp.task('build', ['js', 'css', 'html', 'img', 'utils']);
 gulp.task('start', ['build', 'watch', 'server']);
 gulp.task('default', ['build']);
