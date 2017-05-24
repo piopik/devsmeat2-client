@@ -28,14 +28,14 @@
 <body>
     <div id="app" class="loading">
 
-        <div v-if="timer.value" class="timer">
+        <div class="timer">
             <div class="marker" v-bind:style="{ transform :  'scaleX(' + timer.value/timer.max + ')' }"></div>
         </div>
 
         <div v-if="toaster.data.length" class="toaster" >
             <div class="toast" v-for="toast in toaster.data">
                 <div class="text" v-bind:style="{ background : toast.color }">{{ toast.text }}</div>
-                <img class="icon" v-bind:src=" '/img/' + toast.icon + '.svg' ">
+                <img class="icon" v-bind:src=" './img/' + toast.icon + '.svg' ">
             </div>
         </div>
 

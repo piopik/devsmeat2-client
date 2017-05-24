@@ -77,9 +77,12 @@ let app = new Vue({
     created : function(){
 
         this.socket.on("joined",function(res) {
-            app.user = res;
+            app.user = res.user;
             app.user.position = false;
             app.user.points = 0;
+
+            config.questionTime = res.answerTime;
+            config.leaderboardTime = res.leaderboardTime;
         });
 
         this.socket.on("question",function(res) {
@@ -133,6 +136,7 @@ let app = new Vue({
 
             app.timer.value=config.leaderboardTime/1000;
             app.timer.max=config.leaderboardTime/1000;
+
         });
 
         this.socket.on("leaderboardFinish",function() {
@@ -144,7 +148,7 @@ let app = new Vue({
                 app.leaderboard.state.right = true;
             },1000);
 
-            clearInterval();
+
         });
 
         this.socket.on("gameFinish",function(res) {
