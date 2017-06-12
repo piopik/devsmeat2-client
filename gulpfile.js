@@ -23,8 +23,8 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
 
     less = require('gulp-less'),
-    sass = require('gulp-sass');
-postcss = require('gulp-postcss'),
+    sass = require('gulp-sass'),
+    postcss = require('gulp-postcss'),
     autoprefixer = require('autoprefixer'),
 
     imageMin = require('gulp-imagemin'),

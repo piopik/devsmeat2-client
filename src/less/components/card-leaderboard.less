@@ -1,44 +1,50 @@
+@import "card";
+
 .card-leaderboard{
     background: @purple-dark;
+    &:extend(.card);
 
-    .top{
+    &__header {
         color: @white;
+        &:extend(.card__header);
+    }
 
-        .label{
-            font-weight: 300;
-            margin-bottom: 0;
+    &__label{
+        font-weight: 300;
+        margin-bottom: 0;
+    }
+
+    &__body {
+        margin: 0;
+        &:extend(.card__body);
+    }
+
+    &__list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        a{
+            padding: 15px 20px;
+            user-select: none;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
         }
     }
 
-    .center{
-        margin:0;
-
-        .list{
-            list-style: none;
-            padding: 0;
-            margin: 0;
-
-            a{
-                padding: 15px 20px;
-                user-select: none;
-
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-
-                .position{
-                    font-size:.9em;
-                }
-
-                .name{
-                    font-weight:bold;
-                    text-transform: capitalize;
-                }
-
-                .points{
-                    font-size:.9em;
-                }
-            }
-        }
+    &__position{
+        font-size:.9em;
     }
+
+    &__name{
+        font-weight:bold;
+        text-transform: capitalize;
+    }
+
+    &__points{
+        font-size:.9em;
+    }
+
 }

@@ -26,35 +26,35 @@
 </head>
 
 <body>
-    <div id="app" class="loading">
+    <div id="app" class="app app--loading">
 
         <div class="timer">
-            <div class="marker" v-bind:style="{ transform :  'scaleX(' + timer.value/timer.max + ')' }"></div>
+            <div class="timer__marker" v-bind:style="{ transform :  'scaleX(' + timer.value/timer.max + ')' }"></div>
         </div>
 
         <div v-if="toaster.data.length" class="toaster" >
-            <div class="toast" v-for="toast in toaster.data">
-                <div class="text" v-bind:style="{ background : toast.color }">{{ toast.text }}</div>
-                <img class="icon" v-bind:src=" './img/' + toast.icon + '.svg' ">
+            <div class="toaster__toast" v-for="toast in toaster.data">
+                <div class="toaster__text" v-bind:style="{ background : toast.color }">{{ toast.text }}</div>
+                <img class="toaster__icon" v-bind:src=" './img/' + toast.icon + '.svg' ">
             </div>
         </div>
 
-        <div class="player" v-bind:class="{ 'active' : user.name }" >
-            <div class="wrapper" v-bind:style="{ background : ( user.color ? user.color : 'white' ) }">
-                <div class="position">{{ user.position | position }}</div>
-                <div class="name">{{ user.name }}</div>
-                <div class="points">{{user.points}} PTS</div>
+        <div class="player" v-bind:class="{ 'player--active' : user.name }" >
+            <div class="player__container" v-bind:style="{ background : ( user.color ? user.color : 'white' ) }">
+                <div class="player__position">{{ user.position | position }}</div>
+                <div class="player__name">{{ user.name }}</div>
+                <div class="player__points">{{user.points}} PTS</div>
             </div>
         </div>
 
-        <div class="centercontainer" v-bind:class=" { 'inactive' : question.state.left || question.state.right } ">
-            <div class="card card-question" v-bind:class="question.state" >
-                <div class="top">
-                    <div class="label">QUESTION</div>
-                    <div class="question">{{question.data.question}}</div>
+        <div class="centercontainer" v-bind:class=" { 'centercontainer--inactive' : question.state.left || question.state.right } ">
+            <div class="card-question" v-bind:class="{ 'card--left' : question.state.left , 'card--right' : question.state.right }" >
+                <div class="card-question__header">
+                    <div class="card-question__label">QUESTION</div>
+                    <div class="card-question__question">{{question.data.question}}</div>
                 </div>
-                <div class="center">
-                    <ul class="answers">
+                <div class="card-question__body">
+                    <ul class="card-question__answers">
                         <li v-for="answer in question.data.answers">
                             <a v-on:click="sendAnswer(answer.id)">
                                 {{ answer.answer }}
@@ -65,27 +65,27 @@
             </div>
         </div>
 
-        <div class="centercontainer" v-bind:class=" { 'inactive' : !result.state.active } ">
-            <div class="result" v-bind:class="result.state">
-                <h2>{{ ( result.state.correct ? 'GOOD!' : 'WRONG!' ) }}</h2>
-                <h3 v-if="result.state.correct === false">It can only get better ;)</h3>
-                <h3 v-if="result.state.correct && result.state.points === 0">Unfortunately other players were faster :(.</h3>
-                <h3 v-if="result.state.correct && result.state.points > 0">You've gained <span class="bold">{{result.state.points}}</span> {{ ( result.state.points>1 ? 'points' : 'point' ) }}!</h3>
+        <div class="centercontainer" v-bind:class=" { 'centercontainer--inactive' : !result.state.active } ">
+            <div class="result"  v-bind:class="{ 'result--active' : result.state.active } ">
+                <h2 class="result__h2">{{ ( result.state.correct ? 'GOOD!' : 'WRONG!' ) }}</h2>
+                <h3 class="result__h3" v-if="result.state.correct === false">It can only get better ;)</h3>
+                <h3 class="result__h3" v-if="result.state.correct && result.state.points === 0">Unfortunately other players were faster :(.</h3>
+                <h3 class="result__h3" v-if="result.state.correct && result.state.points > 0">You've gained <span class="result__bold">{{result.state.points}}</span> {{ ( result.state.points>1 ? 'points' : 'point' ) }}!</h3>
             </div>
         </div>
 
-        <div class="centercontainer" v-bind:class=" { 'inactive' : leaderboard.state.left || leaderboard.state.right } ">
-            <div class="card card-leaderboard" v-bind:class="leaderboard.state" >
-                <div class="top">
-                    <div class="label">LEADERBOARD</div>
+        <div class="centercontainer" v-bind:class=" { 'centercontainer--inactive' : leaderboard.state.left || leaderboard.state.right } ">
+            <div class="card-leaderboard" v-bind:class="{ 'card--left' : leaderboard.state.left , 'card--right' : leaderboard.state.right }" >
+                <div class="card-leaderboard__header">
+                    <div class="card-leaderboard__label">LEADERBOARD</div>
                 </div>
-                <div class="center">
-                    <ul class="list">
+                <div class="card-leaderboard__body">
+                    <ul class="card-leaderboard__list">
                         <li v-for="user in leaderboard.data.leaderboard">
-                            <a v-bind:style="{ background : user.color }">
-                                <div class="position">{{ user.position | position }}</div>
-                                <div class="name">{{ user.name }}</div>
-                                <div class="points">{{user.points}} PTS</div>
+                            <a class="card-leaderboard__user" v-bind:style="{ background : user.color }">
+                                <div class="card-leaderboard__cardposition">{{ user.position | position }}</div>
+                                <div class="card-leaderboard__name">{{ user.name }}</div>
+                                <div class="card-leaderboard__points">{{user.points}} PTS</div>
                             </a>
                         </li>
                     </ul>

@@ -1,4 +1,4 @@
-#app{
+.app {
   width: 100vw;
   height: 100vh;
   position: relative;
@@ -8,7 +8,7 @@
 
   background: radial-gradient(@purple-light, @purple-dark);
 
-  .centercontainer{
+  .centercontainer {
     width: 100vw;
     height: 100vh;
     position: absolute;
@@ -21,13 +21,13 @@
 
     perspective: 500px;
 
-    &.inactive{
+    &--inactive {
       pointer-events: none;
     }
   }
 
-  &.loading{
-    .centercontainer{
+  &--loading {
+    .app__centercontainer {
       display:none;
     }
 
