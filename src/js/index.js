@@ -168,6 +168,9 @@ let app = new Vue({
                 app.timer.value--;
             }
         },1000);
+
+
+        // this.$el.classList.remove('loading'); (w mounted)
     },
 });
 
