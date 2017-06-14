@@ -7,7 +7,7 @@ import config from './config';
 import Vue from "vue/dist/vue.js";
 
 window.onload = () => {
-    document.querySelector('#app').classList.remove('loading');
+    document.querySelector('#app').classList.remove('app--loading');
 };
 
 let socket = io.connect(config.engine);
@@ -168,6 +168,9 @@ let app = new Vue({
                 app.timer.value--;
             }
         },1000);
+
+
+        // this.$el.classList.remove('loading'); (w mounted)
     },
 });
 

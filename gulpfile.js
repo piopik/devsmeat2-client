@@ -23,11 +23,8 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
 
     less = require('gulp-less'),
-    sass = require('gulp-sass');
-postcss = require('gulp-postcss'),
+    postcss = require('gulp-postcss'),
     autoprefixer = require('autoprefixer'),
-
-    imageMin = require('gulp-imagemin'),
 
     browserSync = require('browser-sync').create(),
     reload = browserSync.reload,
@@ -62,31 +59,17 @@ gulp.task('css', function () {
         autoprefixer
     ];
 
-    if (argv.s) {
-        return gulp.src(src.scssImporter)
-            .pipe(sourcemaps.init())
-            .pipe(sass()).on('error', function (error) {
-                console.log(error.toString());
-                this.emit('end')
-            })
-            .pipe(concat('main.css'))
-            .pipe(postcss(processors))
-            .pipe(sourcemaps.write('/'))
-            .pipe(gulp.dest(dest.css))
-            .pipe(browserSync.stream());
-    } else {
-        return gulp.src(src.lessImporter)
-            .pipe(sourcemaps.init())
-            .pipe(less()).on('error', function (error) {
-                console.log(error.toString());
-                this.emit('end')
-            })
-            .pipe(concat('main.css'))
-            .pipe(postcss(processors))
-            .pipe(sourcemaps.write('/'))
-            .pipe(gulp.dest(dest.css))
-            .pipe(browserSync.stream());
-    }
+    return gulp.src(src.lessImporter)
+        .pipe(sourcemaps.init())
+        .pipe(less()).on('error', function (error) {
+            console.log(error.toString());
+            this.emit('end')
+        })
+        .pipe(concat('main.css'))
+        .pipe(postcss(processors))
+        .pipe(sourcemaps.write('/'))
+        .pipe(gulp.dest(dest.css))
+        .pipe(browserSync.stream());
 });
 
 gulp.task('html', function () {
@@ -101,28 +84,19 @@ gulp.task('utils', function () {
 });
 
 gulp.task('img', function () {
-    if (argv.i) {
-        del([
-            dest.img + '**/*'
-        ]);
-        return gulp.src(src.img)
-            .pipe(imageMin())
-            .pipe(gulp.dest(dest.img))
-            .pipe(browserSync.stream());
-    } else {
-        return null;
-    }
+    del([
+        dest.img + '**/*'
+    ]);
+    return gulp.src(src.img)
+        .pipe(gulp.dest(dest.img))
+        .pipe(browserSync.stream());
 });
 
 gulp.task('watch', function () {
 
     gulp.watch(src.js, ['js']);
 
-    if (argv.s) {
-        gulp.watch(src.scss, ['css']);
-    } else {
-        gulp.watch(src.less, ['css']);
-    }
+    gulp.watch(src.less, ['css']);
 
     gulp.watch(src.html, ['html']);
 

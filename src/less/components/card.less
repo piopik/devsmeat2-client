@@ -10,26 +10,25 @@
 
   box-shadow: 0 0 60px 0 rgba(0,0,0,0.5);
 
-  .top{
-    padding:20px;
-  }
-
-  .center{
-    margin:20px;
-  }
-
-  .bottom{
-    margin:20px;
-  }
-
-  &.left{
+  &--left{
     transform: translateX(-300px) rotateY(-45deg);
     opacity:0;
   }
 
-  &.right{
+  &--right{
     transform: translateX(300px) rotateY(45deg);
     opacity:0;
   }
+}
 
+.card__header{
+  padding:20px;
+}
+
+.card__body {
+  margin:20px;
+}
+
+.card__bottom {
+  margin:20px;
 }
