@@ -1,6 +1,6 @@
 <template>
   <div class="timer">
-    <div class="timer__marker" v-bind:style="{ transform :  'scaleX(' + value/max + ')' }"></div>
+    <div class="marker" v-bind:style="{ transform :  'scaleX(' + value/max + ')' }"></div>
   </div>
 </template>
 
@@ -19,7 +19,7 @@
     position: fixed;
     top:0;
 
-    &__marker{
+    .marker{
       position: absolute;
       height: 5px;
       width: 100%;

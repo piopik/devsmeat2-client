@@ -1,15 +1,15 @@
 <template>
-  <div class="card-leaderboard" v-bind:class="{ 'card--left' : state.left , 'card--right' : state.right }" >
-    <div class="card-leaderboard__header">
-      <div class="card-leaderboard__label">LEADERBOARD</div>
+  <div class="card-leaderboard" v-bind:class="{ 'left' : state.left , 'right' : state.right }" >
+    <div class="header">
+      <div class="label">LEADERBOARD</div>
     </div>
-    <div class="card-leaderboard__body">
-      <ul class="card-leaderboard__list">
+    <div class="body">
+      <ul class="list">
         <li v-for="user in data.leaderboard">
-          <a class="card-leaderboard__user" v-bind:style="{ background : user.color }">
-            <div class="card-leaderboard__cardposition">{{ user.position | position }}</div>
-            <div class="card-leaderboard__name">{{ user.name }}</div>
-            <div class="card-leaderboard__points">{{user.points}} PTS</div>
+          <a class="user" v-bind:style="{ background : user.color }">
+            <div class="cardposition">{{ user.position | position }}</div>
+            <div class="name">{{ user.name }}</div>
+            <div class="points">{{user.points}} PTS</div>
           </a>
         </li>
       </ul>
@@ -38,30 +38,28 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import './../styles/variables.less';
   @import './../styles/card.less';
 
   .card-leaderboard{
     background: @purple-dark;
-    &:extend(.card);
+    &:extend(.card all);
 
-    &__header {
+    .header {
       color: @white;
-      &:extend(.card__header);
     }
 
-    &__label{
+    .label{
       font-weight: 300;
       margin-bottom: 0;
     }
 
-    &__body {
+    .body {
       margin: 0;
-      &:extend(.card__body);
     }
 
-    &__list {
+    .list {
       list-style: none;
       padding: 0;
       margin: 0;
@@ -76,18 +74,17 @@
       }
     }
 
-    &__position{
+    .position{
       font-size:.9em;
     }
 
-    &__name{
+    .name{
       font-weight:bold;
       text-transform: capitalize;
     }
 
-    &__points{
+    .points{
       font-size:.9em;
     }
-
   }
 </style>

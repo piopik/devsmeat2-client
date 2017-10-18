@@ -4,18 +4,26 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-  question: {}
+  question: {},
+  leaderboard: [],
+  user: {}
 }
 
 const mutations = {
   QUESTION (state, q) {
     state.question = q;
+  },
+  LEADERBOARD (state, l) {
+    state.leaderboard = l;
   }
 }
 
 const actions = {
   question (context, data) {
       context.commit('QUESTION', data)
+  },
+  leaderboard (context, data) {
+    context.commit('LEADERBOARD', data)
   }
 }
 

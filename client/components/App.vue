@@ -4,15 +4,15 @@
     <Toaster :data="toaster.data" />
     <Player :user="user" />
 
-    <div class="centercontainer" v-bind:class=" { 'centercontainer--inactive' : question.state.left || question.state.right } ">
+    <div class="centercontainer" v-bind:class=" { 'inactive' : question.state.left || question.state.right } ">
       <Card-Question :state="question.state" :question="question.data.question" :answers="question.data.answers" :sendAnswer="sendAnswer" />
     </div>
 
-    <div class="centercontainer" v-bind:class=" { 'centercontainer--inactive' : !result.state.active } ">
+    <div class="centercontainer" v-bind:class=" { 'inactive' : !result.state.active } ">
      <Result :active="result.state.active" :correct="result.state.correct" :points="result.state.points" />
     </div>
 
-    <div class="centercontainer" v-bind:class=" { 'centercontainer--inactive' : leaderboard.state.left || leaderboard.state.right } ">
+    <div class="centercontainer" v-bind:class=" { 'inactive' : leaderboard.state.left || leaderboard.state.right } ">
       <Card-Leaderboard :state="leaderboard.state" :data="leaderboard.data" />
     </div>
   </div>
@@ -212,13 +212,13 @@
 
       perspective: 500px;
 
-      &--inactive {
+      &.inactive {
         pointer-events: none;
       }
     }
 
-    &--loading {
-      .app__centercontainer {
+    &.loading {
+      .centercontainer {
         display: none;
       }
 

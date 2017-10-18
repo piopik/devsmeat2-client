@@ -1,11 +1,11 @@
 <template>
-  <div class="card-question" v-bind:class="{ 'card--left' : state.left , 'card--right' : state.right }" >
-    <div class="card-question__header">
-      <div class="card-question__label">QUESTION</div>
-      <div class="card-question__question">{{question}}</div>
+  <div class="card-question" v-bind:class="{ 'left' : state.left , 'right' : state.right }" >
+    <div class="header">
+      <div class="label">QUESTION</div>
+      <div class="question">{{question}}</div>
     </div>
-    <div class="card-question__body">
-      <ul class="card-question__answers">
+    <div class="body">
+      <ul class="answers">
         <li v-for="answer in answers">
           <a v-on:click="sendAnswer(answer.id)">
             {{ answer.answer }}
@@ -27,30 +27,28 @@
   @import './../styles/card.less';
 
   .card-question{
-    &:extend(.card);
+    &:extend(.card all);
 
-    &__header {
-      &:extend(.card__header);
+    .header {
       background: @rose;
       color: @white;
     }
 
-    &__label{
+    .label{
       font-weight: 300;
       margin-bottom: 1em;
     }
 
-    &__question{
+    .question{
       font-size: 1.5em;
       font-weight: 700;
     }
 
-    &__body {
-      &:extend(.card__body);
+    .body {
       margin:0;
     }
 
-    &__answers{
+    .answers{
       list-style: none;
       padding: 0;
       margin: 0;

@@ -1,9 +1,9 @@
 <template>
-  <div class="result"  v-bind:class="{ 'result--active' : active } ">
-    <h2 class="result__h2">{{ (correct ? 'GOOD!' : 'WRONG!' ) }}</h2>
-    <h3 class="result__h3" v-if="correct === false">It can only get better ;)</h3>
-    <h3 class="result__h3" v-if="correct && points === 0">Unfortunately other players were faster :(.</h3>
-    <h3 class="result__h3" v-if="correct && points > 0">You've gained <span class="result__bold">{{points}}</span> {{ ( points>1 ? 'points' : 'point' ) }}!</h3>
+  <div class="result"  v-bind:class="{ 'active' : active } ">
+    <h2>{{ (correct ? 'GOOD!' : 'WRONG!' ) }}</h2>
+    <h3 v-if="correct === false">It can only get better ;)</h3>
+    <h3 v-if="correct && points === 0">Unfortunately other players were faster :(.</h3>
+    <h3 v-if="correct && points > 0">You've gained <span class="bold">{{points}}</span> {{ ( points>1 ? 'points' : 'point' ) }}!</h3>
   </div>
 </template>
 
@@ -13,28 +13,27 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import './../styles/variables.less';
 
   .result{
-
     color: @white;
     text-align:center;
     opacity:0;
     transition: opacity .2s @transition-ease;
 
-    &__h2 {
+    h2 {
       font-size: 3em;
       margin:0;
       font-weight:700;
     }
 
-    &__h3 {
+    h3 {
       margin:0;
       font-weight:300;
     }
 
-    &__bold {
+    .bold {
       font-weight:700;
     }
 
@@ -55,7 +54,7 @@
       border-radius: 50%;
     }
 
-    &--active{
+    &.active{
       opacity:1;
 
       &:before{

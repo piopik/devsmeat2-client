@@ -1,9 +1,9 @@
 <template>
-  <div class="player" v-bind:class="{ 'player--active' : user.name }" >
-    <div class="player__container" v-bind:style="{ background : ( user.color ? user.color : 'white' ) }">
-      <div class="player__position">{{ user.position | position }}</div>
-      <div class="player__name">{{ user.name }}</div>
-      <div class="player__points">{{user.points}} PTS</div>
+  <div class="player" v-bind:class="{ 'active' : user.name }" >
+    <div class="container" v-bind:style="{ background : ( user.color ? user.color : 'white' ) }">
+      <div class="position">{{ user.position | position }}</div>
+      <div class="name">{{ user.name }}</div>
+      <div class="points">{{user.points}} PTS</div>
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import './../styles/variables.less';
 
   .player{
@@ -45,11 +45,11 @@
     transition: transform @transition-time @transition-ease;
     transform: translateY(80px);
 
-    &--active {
+    &.active {
       transform: translateY(0px);
     }
 
-    &__container {
+    .container {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -64,16 +64,16 @@
       text-align: center;
     }
 
-    &__position {
+    .position {
       font-size:.9em;
     }
 
-    &__name {
+    .name {
       font-weight:bold;
       text-transform: capitalize;
     }
 
-    &__points {
+    .points {
       font-size:.9em;
     }
   }
